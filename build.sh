@@ -7,14 +7,15 @@ then
   IMAGE_NAME='waltisfrozen/sample-project-goodrx'
 else
   IMAGE_NAME=$1
+  echo -e "\n##################################\n\nBuilding Docker image\n\n##################################\n"
+
+  docker build -t $IMAGE_NAME -f docker/Dockerfile docker/
+  echo -e "\n##################################\n\nPushing Docker image to public registry\n\n##################################\n"
+
+  docker push $IMAGE_NAME
 fi
 
-echo -e "\n##################################\n\nBuilding Docker image\n\n##################################\n"
 
-docker build -t $IMAGE_NAME -f docker/Dockerfile docker/
-echo -e "\n##################################\n\nPushing Docker image to public registry\n\n##################################\n"
-
-docker push $IMAGE_NAME
 
 echo -e "\n##################################\n\nCreating keypair for EC2 instances\n\n##################################\n"
 ssh-keygen -t rsa -b 4096 -C "waltisfrozen@gmail.com" -P "" -f ./terraform/goodrx
